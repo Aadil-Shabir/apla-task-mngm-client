@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { Box, Typography } from "@mui/material";
+import Tasks from "./components/Tasks";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "100vh",
+                height: "100%",
+                flexDirection: "column",
+                mx: "2rem",
+            }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <Typography variant="h4" sx={{ textAlign: "center" }}>
+                Task Management
+            </Typography>
+            <Tasks />
+        </Box>
+    );
 }
 
 export default App;
