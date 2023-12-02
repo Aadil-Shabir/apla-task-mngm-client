@@ -6,7 +6,7 @@ import EditTask from "./EditTask";
 import TasksContext from "./store/TasksStore";
 import { formatCustomDate, formatAgoDate } from "../utils/formateDate";
 
-const Task = ({ title, deadline, date, completed, id }) => {
+const Task = ({ title, deadline, date, completed, id, recurrence }) => {
     const [isComplete, setIsComplete] = useState(completed);
     const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -95,6 +95,7 @@ const Task = ({ title, deadline, date, completed, id }) => {
                 handleClose={handleClose}
                 completed={completed}
                 id={id}
+                recurrence={recurrence}
             />
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: "0.5rem" }}>
                 <Box>
@@ -116,6 +117,15 @@ const Task = ({ title, deadline, date, completed, id }) => {
 
                     <Typography variant="body2" color="darkgoldenrod">
                         <span style={{ color: "black" }}>Due by:</span> {formatCustomDate(deadline)}
+                    </Typography>
+
+                    <Typography variant="body2" color="darkgoldenrod">
+                        <span style={{ color: "black" }}>Recurrence:</span>
+                        {recurrence && recurrence.frequency.includes("do not repeat")
+                            ? " Do not Repeat"
+                            : recurrence && recurrence.frequency
+                            ? ` ${recurrence.frequency} on interval of ${recurrence.interval}`
+                            : null}
                     </Typography>
                 </Box>
 

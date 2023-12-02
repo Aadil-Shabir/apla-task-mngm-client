@@ -47,6 +47,7 @@ const Tasks = () => {
                             date={task.date}
                             completed={task.completed}
                             id={task._id}
+                            recurrence={task.recurrence}
                         />
                     ))
                 ) : (

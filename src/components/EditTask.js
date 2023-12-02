@@ -1,5 +1,16 @@
 import { useState, useContext } from "react";
-import { Modal, Box, Typography, FormControl, TextField, Button, CircularProgress } from "@mui/material";
+import {
+    Modal,
+    Box,
+    Typography,
+    FormControl,
+    TextField,
+    Button,
+    CircularProgress,
+    InputLabel,
+    Select,
+    MenuItem,
+} from "@mui/material";
 import DateTimePicker from "./common/DateTimePicker";
 import TasksContext from "./store/TasksStore";
 
@@ -18,9 +29,13 @@ const style = {
     gap: "1rem",
 };
 
-const EditTask = ({ open, handleClose, id, title, deadline, completed }) => {
+const EditTask = ({ open, handleClose, id, title, deadline, completed, recurrence }) => {
     const [titleVal, setTitleVal] = useState(title);
     const [deadlineVal, setDeadlineVal] = useState(deadline);
+    const [frequencyVal, setFrequencyVal] = useState(
+        recurrence && recurrence.frequency ? recurrence.frequency : "do not repeat"
+    );
+    const [intervalVal, setIntervalVal] = useState(recurrence && recurrence.interval ? recurrence.interval : 1);
     const [isLoading, setIsLoading] = useState(false);
     const { tasks, setTasks } = useContext(TasksContext);
 
@@ -29,6 +44,10 @@ const EditTask = ({ open, handleClose, id, title, deadline, completed }) => {
     const handleDeadlineChange = (newValue) => {
         setDeadlineVal(newValue);
     };
+
+    const handleRecurChange = (e) => setFrequencyVal(e.target.value);
+
+    const handleIntervalChange = (e) => setIntervalVal(e.target.value);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,6 +64,10 @@ const EditTask = ({ open, handleClose, id, title, deadline, completed }) => {
                     deadline: deadlineVal,
                     _id: id,
                     completed,
+                    recurrence: {
+                        frequency: frequencyVal,
+                        interval: intervalVal,
+                    },
                 }),
             });
 
@@ -87,6 +110,27 @@ const EditTask = ({ open, handleClose, id, title, deadline, completed }) => {
                         onChange={(newValue) => handleDeadlineChange(newValue)}
                     />
                 </FormControl>
+                <Box sx={{ display: "flex", justifyContent: "space-between", gap: "1rem" }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="recurrence">Recurrence</InputLabel>
+                        <Select label="recurrence" value={frequencyVal} onChange={handleRecurChange}>
+                            <MenuItem value="do not repeat">Do not repeat</MenuItem>
+                            <MenuItem value="daily">Daily</MenuItem>
+                            <MenuItem value="weekly">Weekly</MenuItem>
+                            <MenuItem value="monthly">monthly</MenuItem>
+                            <MenuItem value="yearly">Yearly</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl>
+                        <TextField
+                            label="Interval"
+                            name="interval"
+                            disabled={frequencyVal === "do not repeat" ? true : false}
+                            value={intervalVal}
+                            onChange={handleIntervalChange}
+                        />
+                    </FormControl>
+                </Box>
                 <Box
                     sx={{
                         display: "flex",
